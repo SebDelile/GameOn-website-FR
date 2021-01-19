@@ -1,4 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans&display=swap");
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans&family=Roboto&display=swap");
 @keyframes modalopen {
   from {
     opacity: 0;
@@ -25,138 +26,83 @@ body {
   margin: 0 auto;
 }
 
-p {
-  margin-bottom: 0;
-  padding: 0.5vw;
-}
-
-img {
-  padding-right: 1rem;
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: "DM Sans", Arial, Helvetica, sans-serif;
 }
 
 .btn-submit,
 .btn-signup {
   background: #fe142f;
+  color: white;
   display: block;
+  cursor: pointer;
+  border: 0;
   margin: 0 auto;
   border-radius: 7px;
   font-size: 1rem;
   padding: 12px 82px;
-  color: #fff;
-  cursor: pointer;
-  border: 0;
 }
 
-.topnav {
+.header {
   overflow: hidden;
   margin: 3.5%;
+  /*a changer*/
+  display: flex;
+  justify-content: space-between;
+  font-family: "Roboto", sans-serif;
 }
-
-.header-logo {
-  float: left;
-}
-
-.main-navbar {
-  float: right;
-}
-
-.topnav a {
-  float: left;
-  display: block;
-  color: #000000;
-  text-align: center;
-  padding: 12px 12px;
-  margin: 5px;
-  text-decoration: none;
+.header__navbar {
+  display: flex;
   font-size: 20px;
-  font-family: Roboto, sans-serif;
 }
-
-.topnav a:hover {
-  background-color: #ff0000;
-  color: #ffffff;
-  border-radius: 15px;
+.header__navbar a {
+  text-align: center;
+  padding: 12px;
+  margin: 5px;
 }
-
-.topnav a.active {
-  background-color: #ff0000;
-  color: #ffffff;
-  border-radius: 15px;
-}
-
-.topnav .icon {
+.header__navbar a:last-child {
   display: none;
 }
-
-@media screen and (max-width: 768px) {
-  .topnav a {
-    display: none;
-  }
-
-  .topnav a.icon {
-    float: right;
-    display: block;
-  }
+.header__navbar a:hover {
+  background-color: #fe142f;
+  color: white;
+  border-radius: 15px;
 }
 @media screen and (max-width: 768px) {
-  .topnav.responsive {
-    position: relative;
-  }
-
-  .topnav.responsive .icon {
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-
-  .topnav.responsive a {
-    float: none;
-    display: block;
-    text-align: left;
-  }
-}
-@media screen and (max-width: 540px) {
-  .topnav a {
+  .header__navbar a {
     display: none;
+    /*-----------------refaire le menu déroulant mobile/tablette-----------------*/
   }
-
-  .topnav a.icon {
-    float: right;
+  .header__navbar a:last-child {
     display: block;
-    margin-top: -15px;
   }
 }
+
 .footer {
-  margin: 20px;
-  padding: 10px;
-  font-family: var(--font-slab);
-}
-
-footer {
-  padding-left: 2vw;
-  padding-right: 2vw;
   margin: 0 20px;
+  padding: 10px 2vw;
 }
 
 .copyrights {
   color: #fe142f;
+  font-weight: bolder;
   padding: 0;
   font-size: 1rem;
   margin: 60px 0 30px;
-  font-weight: bolder;
 }
-
 @media screen and (max-width: 800px) {
   .copyrights {
     margin-top: 50px;
     text-align: center;
   }
 }
-.bground {
+
+.blur {
   display: none;
   position: fixed;
   z-index: 1;
@@ -168,64 +114,50 @@ footer {
   background-color: rgba(26, 39, 156, 0.4);
 }
 
-.content {
+.modal {
   margin: 5% auto;
+  padding: 40px 40px 30px 40px;
+  /*add query pour avoir padding latéral 8% petit écran*/
   width: 100%;
   max-width: 500px;
-  animation-name: modalopen;
-  animation-duration: var(--modal-duration);
+  animation: modalopen 800ms;
   background: #232323;
-  border-radius: 10px;
   overflow: hidden;
   position: relative;
-  color: #fff;
-  padding-top: 10px;
+  /*sert pour animation et bouton close*/
+  color: white;
+  border-radius: 10px;
 }
-
-.modal-body {
-  padding: 15px 8%;
-  margin: 15px auto;
-}
-
-.close {
+.modal__close {
   position: absolute;
   right: 15px;
   top: 15px;
-  width: 32px;
-  height: 32px;
-  opacity: 1;
+  width: 24px;
+  height: 24px;
   cursor: pointer;
-  transform: scale(0.7);
 }
-
-.close:before,
-.close:after {
+.modal__close__bar {
   position: absolute;
-  left: 15px;
-  content: " ";
-  height: 33px;
-  width: 3px;
-  background-color: #fff;
+  height: 24px;
+  width: 2px;
+  left: 50%;
+  background-color: white;
 }
-
-.close:before {
+.modal__close__bar:first-child {
   transform: rotate(45deg);
 }
-
-.close:after {
+.modal__close__bar:last-child {
   transform: rotate(-45deg);
 }
 
 main {
+  text-align: justify;
   font-size: 130%;
-  font-weight: bolder;
-  color: black;
   padding-top: 0.5vw;
   padding-left: 2vw;
   padding-right: 2vw;
   margin: 1px 20px 15px;
   border-radius: 2rem;
-  text-align: justify;
 }
 
 .button {

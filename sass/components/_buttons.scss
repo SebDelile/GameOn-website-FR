@@ -1,12 +1,12 @@
 .btn-submit,
 .btn-signup {
-  background: #fe142f;
+  background: $color-primary;
+  color: white;
   display: block;
+  cursor: pointer;
+  border: 0;
   margin: 0 auto;
   border-radius: 7px;
   font-size: 1rem;
   padding: 12px 82px;
-  color: #fff;
-  cursor: pointer;
-  border: 0;
 }
