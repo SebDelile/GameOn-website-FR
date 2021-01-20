@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans&family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans&display=swap");
 @keyframes modalopen {
   from {
     opacity: 0;
@@ -19,8 +19,6 @@
 
 body {
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
   font-size: 18px;
   max-width: 1300px;
   margin: 0 auto;
@@ -35,35 +33,42 @@ body {
   font-family: "DM Sans", Arial, Helvetica, sans-serif;
 }
 
-.btn-submit,
-.btn-signup {
+.button {
   background: #fe142f;
-  color: white;
-  display: block;
-  cursor: pointer;
   border: 0;
-  margin: 0 auto;
-  border-radius: 7px;
-  font-size: 1rem;
-  padding: 12px 82px;
+  color: white;
+  cursor: pointer;
+  border-radius: 15px;
+  padding: 1em;
+  outline: none;
+}
+
+.button:hover {
+  background: #3876ac;
 }
 
 .header {
   overflow: hidden;
-  margin: 3.5%;
-  /*a changer*/
+  margin: 2rem 5%;
   display: flex;
   justify-content: space-between;
-  font-family: "Roboto", sans-serif;
+  align-items: center;
+}
+.header__logo {
+  margin-right: 5px;
 }
 .header__navbar {
   display: flex;
-  font-size: 20px;
+  justify-content: flex-end;
+  flex: auto;
+  font-size: 0.9rem;
 }
 .header__navbar a {
+  display: flex;
+  justify-content: center;
   text-align: center;
-  padding: 12px;
-  margin: 5px;
+  align-items: center;
+  padding: 0.5rem;
 }
 .header__navbar a:last-child {
   display: none;
@@ -84,16 +89,13 @@ body {
 }
 
 .footer {
-  margin: 0 20px;
-  padding: 10px 2vw;
+  margin: 3rem 2.5% 2rem 2.5%;
 }
 
 .copyrights {
   color: #fe142f;
   font-weight: bolder;
-  padding: 0;
   font-size: 1rem;
-  margin: 60px 0 30px;
 }
 @media screen and (max-width: 800px) {
   .copyrights {
@@ -105,7 +107,7 @@ body {
 .blur {
   display: none;
   position: fixed;
-  z-index: 1;
+  z-index: 2;
   left: 0;
   top: 0;
   height: 100%;
@@ -150,45 +152,40 @@ body {
   transform: rotate(-45deg);
 }
 
-main {
-  text-align: justify;
-  font-size: 130%;
-  padding-top: 0.5vw;
-  padding-left: 2vw;
-  padding-right: 2vw;
-  margin: 1px 20px 15px;
-  border-radius: 2rem;
-}
-
-.button {
-  background: #fe142f;
-  margin-top: 0.5em;
-  padding: 1em;
-  color: #fff;
-  border-radius: 15px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.button:hover {
-  background: #3876ac;
-}
-
-label {
-  font-family: var(--font-default);
-  font-size: 17px;
-  font-weight: normal;
-  display: inline-block;
+.formData {
   margin-bottom: 11px;
 }
 
-input {
-  padding: 8px;
-  border: 0.8px solid #ccc;
-  outline: none;
+.text-label, .radio-label, .checkbox-label, .radio-list__label {
+  font-weight: normal;
+  font-size: 17px;
 }
 
-.text-control {
+.text-label {
+  display: block;
+}
+
+.radio-label, .checkbox-label {
+  display: flex;
+  justify-content: flex-start;
+  margin-right: 8px;
+  margin-bottom: 11px;
+}
+
+.radio-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.radio-list__label {
+  width: 100%;
+  margin-bottom: 11px;
+  flex: none;
+}
+
+.text-input {
+  outline: none;
+  background-color: white;
   margin: 0;
   padding: 8px;
   width: 100%;
@@ -197,81 +194,55 @@ input {
   height: 48px;
 }
 
-.checkbox-label,
-.checkbox2-label {
-  position: relative;
-  margin-left: 36px;
-  font-size: 12px;
-  font-weight: normal;
-}
-
-.checkbox-label .checkbox-icon,
-.checkbox2-label .checkbox-icon {
+.radio-icon, .checkbox-icon {
   display: block;
   width: 20px;
   height: 20px;
-  border: 2px solid #279e7a;
-  border-radius: 50%;
-  text-indent: 29px;
-  white-space: nowrap;
-  position: absolute;
-  left: -30px;
-  top: -1px;
-  transition: 0.3s;
+  margin-right: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: none;
 }
 
-.checkbox-label .checkbox-icon::after,
-.checkbox2-label .checkbox-icon::after {
-  content: "";
-  width: 13px;
-  height: 13px;
-  background-color: #279e7a;
+.radio-icon {
+  /*un cercle (contour) avec un cercle (plein) à l'interieur quand coché*/
+  /*10% de la taille pour le contour + 10% entre cercle plein et cercle creux => 60% pour cercle plein*/
   border-radius: 50%;
-  text-indent: 29px;
-  white-space: nowrap;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  transition: 0.3s;
-  opacity: 0;
+  border: 2px solid #279e7a;
+}
+.radio-icon__checked {
+  display: none;
+  background-color: #279e7a;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.checkbox-icon {
+  border-radius: 4px;
+  background-color: #C4C4C4;
+  font-size: 12px;
+}
+.checkbox-icon__checked {
+  display: none;
 }
 
 .checkbox-input {
   display: none;
 }
-
-.checkbox-input:checked + .checkbox-label .checkbox-icon::after,
-.checkbox-input:checked + .checkbox2-label .checkbox-icon::after {
-  opacity: 1;
+.checkbox-input:checked + .checkbox-icon {
+  background-color: #279e7a;
+}
+.checkbox-input:checked + .checkbox-icon > .checkbox-icon__checked {
+  display: block;
 }
 
-.checkbox-input:checked + .checkbox2-label .checkbox-icon {
-  background: #279e7a;
+.radio-input {
+  display: none;
 }
-
-.checkbox2-label .checkbox-icon {
-  border-radius: 4px;
-  border: 0;
-  background: #c4c4c4;
-}
-
-.checkbox2-label .checkbox-icon::after {
-  width: 7px;
-  height: 4px;
-  border-radius: 2px;
-  background: transparent;
-  border: 2px solid transparent;
-  border-bottom-color: #fff;
-  border-left-color: #fff;
-  transform: rotate(-55deg);
-  left: 21%;
-  top: 19%;
-}
-
-.text-label {
-  font-weight: normal;
-  font-size: 16px;
+.radio-input:checked + .radio-icon > .radio-icon__checked {
+  display: block;
 }
 
 /*_____________________________code erreur______________________*/
@@ -302,75 +273,51 @@ input {
       font-size: 0.4em;
       color: red;
   } */
-/*attention c'est le bouton je m'inscris*/
-.modal-btn {
-  font-size: 145%;
-  background: #fe142f;
-  display: flex;
-  margin: auto;
-  padding: 2em;
-  color: #fff;
-  padding: 0.75rem 2.5rem;
-  border-radius: 1rem;
-  cursor: pointer;
-}
-
-.modal-btn:hover {
-  background: #3876ac;
-}
-
-.btn-signup {
-  outline: none;
-  text-transform: capitalize;
-  font-size: 1.3rem;
-  padding: 15px 23px;
-  margin: 0;
-  margin-top: 59px;
-}
-
-.hero-section > .btn-signup {
-  display: none;
-}
-
-.hero-section {
-  min-height: 93vh;
+.hero {
+  min-height: 70vh;
   border-radius: 10px;
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: 5% 36% 1fr;
+  grid-template-rows: 2rem min-content min-content min-content minmax(2rem, auto);
+  justify-items: start;
   overflow: hidden;
   box-shadow: 0 2px 7px 2px rgba(0, 0, 0, 0.2);
-  margin-bottom: 10px;
-}
-
-.hero-content {
-  padding: 51px 67px;
-  grid-column: span 4;
   background: #232323;
-  color: #fff;
-  position: relative;
-  text-align: left;
-  min-width: 424px;
+  color: white;
+  margin: 0 5%;
 }
-
-.hero-content::after {
-  content: "";
-  width: 100%;
-  height: 100%;
-  background: #232323;
-  position: absolute;
-  right: -80px;
-  top: 0;
-}
-
-.hero-content > * {
-  position: relative;
+.hero__image {
+  grid-column: 3;
+  grid-row: 1/span 5;
   z-index: 1;
+  height: 100%;
+  min-width: 100%;
+  object-fit: cover;
 }
-
-.hero-headline {
+.hero__headline {
+  grid-column: 2/span 2;
+  grid-row: 2;
+  z-index: 2;
   font-size: 6rem;
-  font-weight: normal;
-  white-space: nowrap;
+  line-height: 125%;
+  font-weight: 500;
+  margin-bottom: 2rem;
+}
+.hero__text {
+  grid-column: 2;
+  grid-row: 3;
+  z-index: 2;
+  font-size: 1.5rem;
+  line-height: 125%;
+  margin-bottom: 2rem;
+  margin-right: 0.5rem;
+}
+.hero .btn-signup {
+  grid-column: 2;
+  grid-row: 4;
+  z-index: 2;
+  font-size: 1.5rem;
+  line-height: 125%;
 }
 
 .hero-text {

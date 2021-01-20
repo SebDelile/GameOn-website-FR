@@ -1,16 +1,23 @@
 .header {
   overflow: hidden;
-  margin: 3.5%; /*a changer*/
+  margin: 2rem $main-lateral-margin;
   display: flex;
   justify-content: space-between;
-  font-family: "Roboto", sans-serif;
+  align-items: center;
+  &__logo {
+    margin-right: 5px;
+  }
   &__navbar {
     display: flex;
-    font-size: 20px;
+    justify-content: flex-end;
+    flex: auto;
+    font-size: 0.9rem;
     a {
+      display: flex;
+      justify-content: center;
       text-align: center;
-      padding: 12px;
-      margin: 5px;
+      align-items: center;
+      padding: 0.5rem;
       &:last-child {
         display: none;
       }

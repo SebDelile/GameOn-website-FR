@@ -1,69 +1,51 @@
-
-
-/*attention c'est le bouton je m'inscris*/
-.modal-btn {
-  font-size: 145%;
-  background: #fe142f;
-  display: flex;
-  margin: auto;
-  padding: 2em;
-  color: #fff;
-  padding: 0.75rem 2.5rem;
-  border-radius: 1rem;
-  cursor: pointer;
-}
-.modal-btn:hover {
-  background: #3876ac;
-}
-
-.btn-signup {
-  outline: none;
-  text-transform: capitalize;
-  font-size: 1.3rem;
-  padding: 15px 23px;
-  margin: 0;
-  margin-top: 59px;
-}
-.hero-section > .btn-signup {
-  display: none;
-}
-
-.hero-section {
-  min-height: 93vh;
+.hero {
+  min-height: 70vh;
   border-radius: 10px;
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: 5% 36% 1fr;
+  grid-template-rows: 2rem min-content min-content min-content minmax(2rem, auto);
+  justify-items: start;
   overflow: hidden;
   box-shadow: 0 2px 7px 2px rgba(0, 0, 0, 0.2);
-  margin-bottom: 10px;
+  background: $color-background;
+  color: white;
+  margin: 0 $main-lateral-margin;
+  &__image {
+    grid-column: 3;
+    grid-row: 1 / span 5;
+    z-index: 1;
+    height: 100%;
+    min-width: 100%;
+    object-fit : cover;
+  }
+  &__headline{
+    grid-column: 2 / span 2;
+    grid-row: 2 ;
+    z-index: 2;
+    font-size: 6rem;
+    line-height: 125%;
+    font-weight: 500;
+    margin-bottom: 2rem;
+  }
+  &__text {
+    grid-column: 2;
+    grid-row: 3;
+    z-index: 2;
+    font-size: 1.5rem;
+    line-height: 125%;
+    margin-bottom: 2rem;
+    margin-right: 0.5rem;
+  }
+  .btn-signup {
+      grid-column: 2;
+      grid-row: 4;
+      z-index: 2;
+      font-size: 1.5rem;
+      line-height: 125%;
+  }
 }
-.hero-content {
-  padding: 51px 67px;
-  grid-column: span 4;
-  background: #232323;
-  color: #fff;
-  position: relative;
-  text-align: left;
-  min-width: 424px;
-}
-.hero-content::after {
-  content: "";
-  width: 100%;
-  height: 100%;
-  background: #232323;
-  position: absolute;
-  right: -80px;
-  top: 0;
-}
-.hero-content > * {
-  position: relative;
-  z-index: 1;
-}
-.hero-headline {
-  font-size: 6rem;
-  font-weight: normal;
-  white-space: nowrap;
-}
+
+
 .hero-text {
   width: 146%;
   font-weight: normal;
@@ -115,3 +97,4 @@
     padding: 12px 35px;
   }
 }
+

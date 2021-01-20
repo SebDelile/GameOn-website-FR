@@ -1,7 +1,7 @@
 .blur {
   display: none;
   position: fixed;
-  z-index: 1;
+  z-index: 2;
   left: 0;
   top: 0;
   height: 100%;
@@ -16,7 +16,7 @@
   width: 100%;
   max-width: 500px;
   animation: modalopen 800ms;
-  background: $color-secondary;
+  background: $color-background;
   overflow: hidden;
   position: relative; /*sert pour animation et bouton close*/
   color: white;
