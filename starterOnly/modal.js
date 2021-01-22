@@ -45,17 +45,8 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 //close modal event
 closeBtn.addEventListener("click", closeModal);
 
-// ------------------------------------ FORM VALIDATION ------------------------------------------
+// ------------------------------------ FORM VALIDATION FUNCTIONS ------------------------------------------
 
-// Disable the default error message on invalid fields in the form (replaced by custom message)
-form.addEventListener(
-  "invalid",
-  function (e) {
-    e.preventDefault();
-    console.error("DEV : au moins une erreur dans le formulaire");
-  },
-  true
-);
 
 //add a span to receive the error message under each field
 for (let field of formData) {
@@ -79,18 +70,19 @@ function notifyError(field, message) {
       }
       break;
     case "radio":
+      let paragraph = field.parentNode.querySelector("p");
       if (message === "") {
-        field.parentNode.style.border = "none";
+        paragraph.style.textDecoration = "none";
       } else {
-        field.parentNode.style.border = "2px solid red";
+        paragraph.style.textDecoration = "underline wavy red";
       }
       break;
     case "checkbox": //only call for checkbox1 (=GCU)
       let label = field.parentNode.querySelector("label");
       if (message === "") {
-        label.style.borderBottom = "none";
+        label.style.textDecoration = "none";
       } else {
-        label.style.borderBottom = "2px solid red";
+        label.style.textDecoration = "underline wavy red";
       }
       break;
   }
@@ -132,7 +124,8 @@ function emailValidation(event) {
 
 //function to check the validity of the birthdate
 function dateValidation(event) {
-  if (event.target.validity.valueMissing) {
+  if (event.target.value === "") {
+    //valueMissing ne se déclenche pas à cause du placeholder
     //if no value, message to require a value
     notifyError(event.target, messageTable.required);
   } else {
@@ -168,7 +161,7 @@ function contestNumberValidation(event) {
 
 //function to check if a radio is selected
 function locationSelected(event) {
-  if (event.target.validity.valueMissing) {
+  if (event.target.validity.valueMissing || event.target.value === "") {
     //if no value, message to require a value
     notifyError(event.target, messageTable.radio);
   } else {
@@ -177,7 +170,7 @@ function locationSelected(event) {
   }
 }
 
-//function to check if a radio is selected
+//function to check if the gcu checkbox is selected
 function gcuAccepted(event) {
   if (event.target.validity.valueMissing) {
     //if no value, message to require a value
@@ -188,27 +181,77 @@ function gcuAccepted(event) {
   }
 }
 
-//realtime validation of input fields (except radio and checkbox)
-form.first.addEventListener("input", nameValidation);
-form.last.addEventListener("input", nameValidation);
-form.email.addEventListener("input", emailValidation);
-form.birthdate.addEventListener("input", dateValidation);
-form.quantity.addEventListener("input", contestNumberValidation);
+//------------------------FORM VERIFICATION EVENTS-------------------------------------------------------------
 
-for (let i = 0; i < form.location.length; i++) {
-  form.location[i].addEventListener("change", locationSelected);
-}
-form.gcu.addEventListener("change", gcuAccepted);
+//realtime validation of input fields (except radio and checkbox)
+//each is launched after first blue
+form.first.addEventListener("blur", function (event) {
+  nameValidation(event);
+  form.first.addEventListener("input", nameValidation);
+});
+
+form.last.addEventListener("blur", function (event) {
+  nameValidation(event);
+  form.last.addEventListener("input", nameValidation);
+});
+
+form.email.addEventListener("blur", function (event) {
+  emailValidation(event);
+  form.email.addEventListener("input", emailValidation);
+});
+
+form.birthdate.addEventListener("blur", function (event) {
+  dateValidation(event);
+  form.birthdate.addEventListener("input", dateValidation);
+});
+
+form.quantity.addEventListener("blur", function (event) {
+  contestNumberValidation(event);
+  form.quantity.addEventListener("input", contestNumberValidation);
+});
 
 // form verification on submission
-form.addEventListener("submit", function (event) {
-  //submission is stoped for verifaction
-  event.preventDefault();
+// Is automattically called on submit event
+form.addEventListener(
+  "invalid",
+  function (event) {
+    // Disable the default error message on invalid fields in the form (replaced by custom message)
+    event.preventDefault();
+    //launch suitable function for each of invalid field
+    switch (event.target) {
+      case form.first:
+      case form.last:
+        nameValidation(event);
+        break;
+      case form.email:
+        emailValidation(event);
+        break;
+      case form.birthdate:
+        dateValidation(event);
+        break;
+      case form.quantity:
+        contestNumberValidation(event);
+        break;
+      case form.location[0]: //need to catch any of the radio input, but not all of them as a list 
+        locationSelected(event);
+        break;
+      case form.gcu:
+        gcuAccepted(event);
+        break;
+    }
+    //After first submission, add event listener to radio and checkbox fields
+    for (let i = 0; i < form.location.length; i++) {
+      form.location[i].addEventListener("change", locationSelected);
+    }
+    form.gcu.addEventListener("change", gcuAccepted);
+  },
+  true
+);
 
-  //all field are valid => submit the form
-  if (form.checkValidity) {
-  }
-  //there is at least one error => stop submission
-  else {
-  }
+//Action on submission of the form
+//Do not occur if at least one field is invalid
+form.addEventListener("submit", function (event) {
+  event.preventDefault();
+  console.log("submission ok");
+
 });

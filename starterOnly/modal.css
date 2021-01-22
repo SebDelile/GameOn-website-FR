@@ -549,6 +549,6 @@ header-logo img {
   padding-bottom : 20px;
 }
 
-label {
+.checkbox-label {
   margin-bottom: unset;
 }
