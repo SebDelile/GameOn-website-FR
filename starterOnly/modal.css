@@ -548,3 +548,7 @@ header-logo img {
   position:relative;
   padding-bottom : 20px;
 }
+
+label {
+  margin-bottom: unset;
+}
