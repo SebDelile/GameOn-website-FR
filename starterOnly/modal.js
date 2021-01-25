@@ -6,15 +6,35 @@ const closeBtn = document.getElementsByClassName("close")[0];
 const form = document.getElementsByTagName("form")[0];
 
 // --------------------------------- VARIABLES --------------------------------------------------
+
+//table used to display the error messages
 const messageTable = {
   required: "Ce champ doit être renseigné",
   name: "Veuillez entrer un minimum de deux caractères",
+  noSpecial: "Veuillez ne pas utiliser de caractères spéciaux ou numériques",
   email: "Veuillez entrer un email valide",
   date: "Veuillez entrer une date de naissance valide",
   numberContests: "Veuillez entrer un nombre entier compris entre 0 et 99",
   radio: "Vous devez sélectionner une ville",
   gcu: "Vous devez accepter les conditions générales d'utilisation",
 };
+
+//birthdate range building
+//current oldest people is born in 1903 (https://en.wikipedia.org/wiki/Oldest_people checked on 2021/01/25)
+form.birthdate.setAttribute("min", "1903-01-01");
+//today is set as upper limit, but if the GCU require a minimum age for participation, the limit should be modified accordingly
+let today = new Date();
+let dd = today.getDate();
+let mm = today.getMonth() + 1; //January is 0!
+let yyyy = today.getFullYear();
+if (dd < 10) {
+  dd = "0" + dd;
+}
+if (mm < 10) {
+  mm = "0" + mm;
+}
+today = yyyy + "-" + mm + "-" + dd;
+form.birthdate.setAttribute("max", today);
 
 // ------------------------------- MENU OPENING MOBILE MODE ----------------------------------------------
 
@@ -47,7 +67,6 @@ closeBtn.addEventListener("click", closeModal);
 
 // ------------------------------------ FORM VALIDATION FUNCTIONS ------------------------------------------
 
-
 //add a span to receive the error message under each field
 for (let field of formData) {
   field.insertAdjacentHTML("beforeEnd", "<span class='invalid-message'></span>");
@@ -58,6 +77,7 @@ function notifyError(field, message) {
   //edit the message, if message ="", then the span is not visible
   field.parentNode.getElementsByClassName("invalid-message")[0].textContent = message;
   //visual indication adding/removing
+  // case of input field : none or red border
   switch (field.type) {
     case "text":
     case "date":
@@ -69,6 +89,7 @@ function notifyError(field, message) {
         field.style.border = "2px solid red";
       }
       break;
+    //case of city selection : none or red underline
     case "radio":
       let paragraph = field.parentNode.querySelector("p");
       if (message === "") {
@@ -77,7 +98,9 @@ function notifyError(field, message) {
         paragraph.style.textDecoration = "underline wavy red";
       }
       break;
-    case "checkbox": //only call for checkbox1 (=GCU)
+    //case of GCU checkbox : none or red underline
+    //only call for checkbox1 (=GCU)
+    case "checkbox":
       let label = field.parentNode.querySelector("label");
       if (message === "") {
         label.style.textDecoration = "none";
@@ -90,68 +113,68 @@ function notifyError(field, message) {
 
 // function to check the first and last name : at least 2 characters, not empty
 function nameValidation(event) {
+  //first : HTML5 verifications : value is not "" and more than 2 characters
   if (event.target.validity.valueMissing) {
-    //if no value, message to require a value
     notifyError(event.target, messageTable.required);
   } else {
-    //there is a value, checking the lenght
     if (event.target.validity.tooShort) {
-      //value is too short => message to require more than 2 characters
       notifyError(event.target, messageTable.name);
     } else {
-      //value is ok, erase error message
-      notifyError(event.target, "");
+      //value is ok for HTML5, now more advanced JS verification to avoid special characters and numbers
+      let = regex = /^[^@&"()\[\]\{\}<>_$*%§¤€£`+=\/\\|~'"°;:!,\.?#0-9]+$/;
+      if (!regex.test(event.target.value)) {
+        notifyError(event.target, messageTable.noSpecial);
+      } else {
+        notifyError(event.target, "");
+      }
     }
   }
 }
 
 //function to check the validity of the email address
 function emailValidation(event) {
+  //first : HTML5 verifications : value is not "" and fits a@a
   if (event.target.validity.valueMissing) {
-    //if no value, message to require a value
     notifyError(event.target, messageTable.required);
   } else {
-    //there is a value, checking the type
     if (event.target.validity.typeMismatch) {
-      //value is not an email => message to require a valid email
       notifyError(event.target, messageTable.email);
     } else {
-      //value is ok, erase error message
-      notifyError(event.target, "");
+      //value is ok for HTML5, now more advanced JS verification to avoid non-whitespace characters and with a domain pattern like "a.a"
+      let = regex = /^\S+@\S+\.\S+$/;
+      if (!regex.test(event.target.value)) {
+        notifyError(event.target, messageTable.email);
+      } else {
+        notifyError(event.target, "");
+      }
     }
   }
 }
 
 //function to check the validity of the birthdate
 function dateValidation(event) {
+  //fully checked with HTML5 verifications : value is not "", is a date and is between lower and upper limits defined in the variable section (see above)
   if (event.target.value === "") {
-    //valueMissing ne se déclenche pas à cause du placeholder
-    //if no value, message to require a value
     notifyError(event.target, messageTable.required);
   } else {
-    //there is a value, checking if this is a valid date
     if (!event.target.validity.valid) {
-      //value is not a valid date => message to require a valid date
       notifyError(event.target, messageTable.date);
     } else {
-      //value is ok, erase error message
       notifyError(event.target, "");
     }
   }
 }
 
-//function to check the validity of the email address
+//function to check the validity of number of attented contests
+//note : an eventlistener is set to block the input of "," or "." in this field (see section form verification event)
 function contestNumberValidation(event) {
+  //fully checked with HTML5 verification : value is not "" and is a positive number or 0
   if (event.target.validity.valueMissing) {
-    //if no value, message to require a value
     notifyError(event.target, messageTable.required);
   } else {
-    //there is a value, checking the type and the range
-    if (event.target.validity.typeMismatch || event.target.value < 0 || event.target.value > 99) {
-      //value is not a number or not in the range 0 ~ 99 => message to require a between 0 and 99
+    if (event.target.validity.typeMismatch || event.target.value < 0) {
       notifyError(event.target, messageTable.numberContests);
     } else {
-      //value is ok, erase error message
       notifyError(event.target, "");
       //round the number to the floor in case it's not an integer
       event.target.value = Math.floor(event.target.value);
@@ -182,6 +205,14 @@ function gcuAccepted(event) {
 }
 
 //------------------------FORM VERIFICATION EVENTS-------------------------------------------------------------
+
+//the field number of contest should be a positive integer, remove "." "," or "-" if tipped
+form.quantity.addEventListener("keydown", function(event){
+  //condition to catch "." "," and "-" characters
+  if (event.key == "," || event.key == "." || event.key == "-") {
+    event.preventDefault();
+  }
+})
 
 //realtime validation of input fields (except radio and checkbox)
 //each is launched after first blue
@@ -232,7 +263,7 @@ form.addEventListener(
       case form.quantity:
         contestNumberValidation(event);
         break;
-      case form.location[0]: //need to catch any of the radio input, but not all of them as a list 
+      case form.location[0]: //need to catch any of the radio input, but not all of them as a list
         locationSelected(event);
         break;
       case form.gcu:
@@ -253,5 +284,4 @@ form.addEventListener(
 form.addEventListener("submit", function (event) {
   event.preventDefault();
   console.log("submission ok");
-
 });
