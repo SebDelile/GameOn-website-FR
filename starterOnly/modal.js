@@ -4,6 +4,8 @@ const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
 const closeBtn = document.getElementsByClassName("close")[0];
 const form = document.getElementsByTagName("form")[0];
+const submiConfirm = document.getElementsByClassName("modal-submitted")[0];
+const submiCloseBtn = document.querySelector(".modal-submitted input");
 
 // --------------------------------- VARIABLES --------------------------------------------------
 
@@ -58,12 +60,33 @@ function launchModal() {
 // close modal form
 function closeModal() {
   modalbg.style.display = "none";
+  form.reset();
+  //remove all event listener on field (they'll be re-add on new registration)
+  form.first.removeEventListener("input", nameValidation);
+  form.last.removeEventListener("input", nameValidation);
+  form.email.removeEventListener("input", emailValidation);
+  form.birthdate.removeEventListener("input", dateValidation);
+  form.quantity.removeEventListener("input", contestNumberValidation);
+  for (let i = 0; i < form.location.length; i++) {
+    form.location[i].removeEventListener("change", locationSelected);
+  }
+  form.gcu.removeEventListener("change", gcuAccepted);
+  //clean all the validation messages and visual indicator
+  notifyError(form.first, "");
+  notifyError(form.last, "");
+  notifyError(form.email, "");
+  notifyError(form.birthdate, "");
+  notifyError(form.quantity, "");
+  notifyError(form.location[0], ""); //need to target one of the radio, not the group
+  notifyError(form.gcu, "");
 }
+
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 
 //close modal event
 closeBtn.addEventListener("click", closeModal);
+submiCloseBtn.addEventListener("click", closeModal);
 
 // ------------------------------------ FORM VALIDATION FUNCTIONS ------------------------------------------
 
@@ -184,11 +207,9 @@ function contestNumberValidation(event) {
 
 //function to check if a radio is selected
 function locationSelected(event) {
-  if (event.target.validity.valueMissing || event.target.value === "") {
-    //if no value, message to require a value
+  if (event.target.validity.valueMissing) {
     notifyError(event.target, messageTable.radio);
   } else {
-    //there is a value, erase error message
     notifyError(event.target, "");
   }
 }
@@ -196,10 +217,8 @@ function locationSelected(event) {
 //function to check if the gcu checkbox is selected
 function gcuAccepted(event) {
   if (event.target.validity.valueMissing) {
-    //if no value, message to require a value
     notifyError(event.target, messageTable.gcu);
   } else {
-    //there is a value, erase error message
     notifyError(event.target, "");
   }
 }
@@ -215,7 +234,7 @@ form.quantity.addEventListener("keydown", function(event){
 })
 
 //realtime validation of input fields (except radio and checkbox)
-//each is launched after first blue
+//each is launched after first blur
 form.first.addEventListener("blur", function (event) {
   nameValidation(event);
   form.first.addEventListener("input", nameValidation);
@@ -284,4 +303,5 @@ form.addEventListener(
 form.addEventListener("submit", function (event) {
   event.preventDefault();
   console.log("submission ok");
+  submiConfirm.style.display = "flex";
 });

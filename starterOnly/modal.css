@@ -552,3 +552,43 @@ header-logo img {
 .checkbox-label {
   margin-bottom: unset;
 }
+
+
+.modal-submitted {
+  display:none; /*turn to flex via JS, inner <p> is horizontally and vertically centred, button is at the bottom*/
+  position: absolute;
+  top:0;
+  left:0;
+  width: 100%;
+  height: 100%;
+  padding: 30px 8%;
+  background-color: #232323;
+  z-index: 5;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-submitted-text {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal-submitted-text p{
+  text-align: center;
+  font-weight: normal;
+  font-size: 40px;
+}
+
+.modal-submitted button{
+  position:absolute;
+  bottom: 0;
+  left:50%;
+  transform:translateX(-50%);
+  flex: none;
+}
+
+.close {
+  z-index: 10 /*to overpass the submission confirmation message*/
+}
