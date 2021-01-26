@@ -226,12 +226,12 @@ function gcuAccepted(event) {
 //------------------------FORM VERIFICATION EVENTS-------------------------------------------------------------
 
 //the field number of contest should be a positive integer, remove "." "," or "-" if tipped
-form.quantity.addEventListener("keydown", function(event){
+form.quantity.addEventListener("keydown", function (event) {
   //condition to catch "." "," and "-" characters
   if (event.key == "," || event.key == "." || event.key == "-") {
     event.preventDefault();
   }
-})
+});
 
 //realtime validation of input fields (except radio and checkbox)
 //each is launched after first blur
@@ -294,14 +294,37 @@ form.addEventListener(
       form.location[i].addEventListener("change", locationSelected);
     }
     form.gcu.addEventListener("change", gcuAccepted);
+
+    //give the focus to the fisrt field with an error message
+    //to avoid several successive focus, tests first which field has focus
+    for (let field of formData) {
+      if (field.querySelector(".invalid-message").textContent != "") {
+        if (field.querySelector("input") != document.activeElement) {
+          field.querySelector("input").focus();
+        }
+        break;
+      }
+    }
   },
   true
 );
 
-//Action on submission of the form
-//Do not occur if at least one field is invalid
+//Action on submission of the form : perform JS verification, and if ok do submission
+//Do not occur if at least one field is invalid according to HTML5 verification
 form.addEventListener("submit", function (event) {
   event.preventDefault();
-  console.log("submission ok");
-  submiConfirm.style.display = "flex";
+  let validity = true; // to turn false for any error
+  for (let field of formData) {
+    //a non-empty message means there is an error, the focus is given to this field and the function finish here
+    if (field.querySelector(".invalid-message").textContent != "") {
+      validity = false;
+      field.querySelector("input").focus();
+      break;
+    }
+  }
+
+  // if true then no error detected => submission ok (confirmation message revealed)
+  if (validity) {
+    submiConfirm.style.display = "flex";
+  }
 });
