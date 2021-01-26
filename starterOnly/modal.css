@@ -528,12 +528,7 @@ footer {
 }
 
 
-/*-----------------------------------------------AJOUTS CSS-------------------------------------------*/
-header-logo img {
-  width: auto;
-  height: auto;
-}
-
+/*-------------------------------CSS added properties to the original file---------------------------*/
 
 .invalid-message {
   position:absolute;
@@ -542,6 +537,17 @@ header-logo img {
   color: red;
   font-size: 0.8rem;
   font-weight: normal;
+}
+
+.content {
+  animation: unset; /*animation properties set in a new class modal-appear and modal-disappear*/
+}
+
+.modal-appear {
+  animation: modalopen var(--modal-duration) normal both;
+}
+.modal-disappear {
+  animation: modalopen var(--modal-duration) reverse both;
 }
 
 .formData {

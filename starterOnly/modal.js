@@ -52,14 +52,19 @@ function editNav() {
 
 // ------------------------------- OPEN AND CLOSE THE MODAL ---------------------------------------------------
 
-// launch modal form
+// launch modal form, add the animation properties and then delete them to allow reverse animation to occur on close
 function launchModal() {
+  modalbg.querySelector(".content").classList.add("modal-appear");
   modalbg.style.display = "block";
+  setTimeout(function(){modalbg.querySelector(".content").classList.remove("modal-appear")}, 1000);
+  
 }
 
-// close modal form
+// close modal form, add the animation properties and then delete them to allow reverse animation to occur on open
 function closeModal() {
-  modalbg.style.display = "none";
+  modalbg.querySelector(".content").classList.add("modal-disappear");
+  setTimeout(function(){modalbg.querySelector(".content").classList.remove("modal-disappear")}, 1000);
+  setTimeout(function(){modalbg.style.display = "none"}, 1000); // let the animation goes on before vanish
   form.reset();
   //remove all event listener on field (they'll be re-add on new registration)
   form.first.removeEventListener("input", nameValidation);
@@ -311,20 +316,26 @@ form.addEventListener(
 
 //Action on submission of the form : perform JS verification, and if ok do submission
 //Do not occur if at least one field is invalid according to HTML5 verification
-form.addEventListener("submit", function (event) {
-  event.preventDefault();
-  let validity = true; // to turn false for any error
+function validate(event) {
+  
   for (let field of formData) {
     //a non-empty message means there is an error, the focus is given to this field and the function finish here
     if (field.querySelector(".invalid-message").textContent != "") {
       validity = false;
       field.querySelector("input").focus();
+      event.preventDefault();
       break;
     }
   }
+  // if it gets here without activating "preventDefault()", the submission is done
+  // So the page is reload with a modified URL (method get, see HTML file)
+};
 
-  // if true then no error detected => submission ok (confirmation message revealed)
-  if (validity) {
-    submiConfirm.style.display = "flex";
-  }
-});
+//if submission has occured, page is reload and the url contain "?" plus the values of the submitted form
+//thus it needs to display the confirmation message (not included to the validate() function because there is a reload of the page)
+const url = window.location.href;
+if (url.indexOf("?") != -1) {
+  submiConfirm.style.display = "flex";
+  submiConfirm.querySelector("p").classList.add("modal-appear");
+  modalbg.style.display = "block";
+}
