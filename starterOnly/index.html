@@ -13,7 +13,7 @@
 <body>
   <div class="topnav" id="myTopnav">
     <div class="header-logo">
-      <img alt="logo" src="Logo.png" />
+      <img alt="logo" src="Logo.png" width="auto" height="auto" />
     </div>
 
     <div class="main-navbar">
@@ -22,7 +22,7 @@
       <a href="#">À propos</a>
       <a href="#">Contact</a>
       <a href="#">Évènements passés</a>
-      <a href="javascript:void(0);" class="icon" onclick="editNav()">  <!--________CODE JSS HERE_________-->
+      <a href="javascript:void(0);" class="icon" onclick="editNav()">
         <i class="fa fa-bars"></i>
       </a>
     </div>
@@ -46,7 +46,7 @@
       <div class="hero-img">
         <img src="bg_img.jpg" alt="img" />
       </div>
-      <button class="btn-signup modal-btn">   <!--_____________BOUTON POP MODAL DUPLIQUE_____________-->
+      <button class="btn-signup modal-btn">
         je m'inscris
       </button>
     </div>
@@ -55,7 +55,8 @@
       <div class="content">
         <span class="close"></span>
         <div class="modal-body">
-          <form name="reserve"> <!--action="index.html" method="get" onsubmit="return validate();"></form>-->
+
+          <form name="reserve" action="index.html" method="get" onsubmit="return validate(event);">
             <div class="formData">
               <label for="first">Prénom</label><br>
               <input class="text-control" type="text" id="first" name="first" minlength="2" required /><br>
