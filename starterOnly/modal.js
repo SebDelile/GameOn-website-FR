@@ -16,7 +16,7 @@ const messageTable = {
   noSpecial: "Veuillez ne pas utiliser de caractères spéciaux ou numériques",
   email: "Veuillez entrer un email valide",
   date: "Veuillez entrer une date de naissance valide",
-  numberContests: "Veuillez entrer un nombre entier compris entre 0 et 99",
+  numberContests: "Veuillez entrer un nombre entier positif ou nul",
   radio: "Vous devez sélectionner une ville",
   gcu: "Vous devez accepter les conditions générales d'utilisation",
 };
@@ -92,7 +92,7 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 closeBtn.addEventListener("click", closeModal);
 submiCloseBtn.addEventListener("click", closeModal);
 
-// ------------------------------------ FORM VALIDATION FUNCTIONS ------------------------------------------
+// ------------------------------------ FORM ERROR NOTIFICATION ------------------------------------------
 
 //add a span to receive the error message under each field
 for (let field of formData) {
@@ -104,7 +104,7 @@ function notifyError(field, message) {
   //edit the message, if message ="", then the span is not visible
   field.parentNode.querySelector(".invalid-message").textContent = message;
   //visual indication adding/removing
-  // case of input field : none or red border
+  //case of input field : none or red border
   switch (field.type) {
     case "text":
     case "date":
@@ -135,6 +135,9 @@ function notifyError(field, message) {
   }
 }
 
+
+// ------------------------------------ FORM VALIDATION FUNCTIONS ------------------------------------------
+
 // function to check the first and last name : at least 2 characters, not empty
 function nameValidation(event) {
   //first : HTML5 verifications : value is not "" and more than 2 characters
@@ -157,14 +160,14 @@ function nameValidation(event) {
 
 //function to check the validity of the email address
 function emailValidation(event) {
-  //first : HTML5 verifications : value is not "" and fits a@a
+  //first : HTML5 verifications : value is not "" and fits x@x
   if (event.target.validity.valueMissing) {
     notifyError(event.target, messageTable.required);
   } else {
     if (event.target.validity.typeMismatch) {
       notifyError(event.target, messageTable.email);
     } else {
-      //value is ok for HTML5, now more advanced JS verification to avoid non-whitespace characters and with a domain pattern like "a.a"
+      //value is ok for HTML5, now more advanced JS verification to avoid non-whitespace characters and with a pattern like "x@x.x"
       let = regex = /^\S+@\S+\.\S+$/;
       if (!regex.test(event.target.value)) {
         notifyError(event.target, messageTable.email);
@@ -190,7 +193,7 @@ function dateValidation(event) {
 }
 
 //function to check the validity of number of attented contests
-//note : an eventlistener is set to block the input of "," or "." in this field (see section form verification event)
+//note : an eventlistener is set to block the input of "," "." or "-" in this field (see section form verification event)
 function contestNumberValidation(event) {
   //fully checked with HTML5 verification : value is not "" and is a positive number or 0
   if (event.target.validity.valueMissing) {
@@ -329,7 +332,7 @@ function validate(event) {
 //if submission has occured, page is reload and the url contain "?" plus the values of the submitted form
 //thus it needs to display the confirmation message (not included to the validate() function because there is a reload of the page)
 const url = window.location.href;
-if (url.indexOf("?") != -1 && url.indexOf("&last=") != -1 && url.indexOf("&birthdate=") != -1 && url.indexOf("&location=") != -1) {
+if (url.indexOf("?") != -1 && url.indexOf("first=") != -1 && url.indexOf("&last=") != -1 && url.indexOf("&email=") != -1 && url.indexOf("&birthdate=") != -1 && url.indexOf("&quantity=") != -1 && url.indexOf("&location=") != -1 && url.indexOf("&gcu=") != -1) {
   submiConfirm.style.display = "flex";
   submiConfirm.querySelector("p").classList.add("modal-appear");
   modalbg.style.display = "block";
