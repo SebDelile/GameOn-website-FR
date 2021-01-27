@@ -14,7 +14,7 @@ body {
   margin: 0;
   display: flex;
   flex-direction: column;
-  background-image: url("background.png");
+  /*background-image: url("background.png"); Cette image n'existe pas*/
   font-family: var(--font-default);
   font-size: 18px;
   max-width: 1300px;
@@ -68,15 +68,16 @@ img {
   display: none;
 }
 
-@media screen and (max-width: 768px) {
+/*Modifiation of the breakpoint from 768 to 1000px to avoid the menu to go on a second line*/
+@media screen and (max-width: 1000px) {
   .topnav a {display: none;}
   .topnav a.icon {
     float: right;
     display: block;
   }
 }
-
-@media screen and (max-width: 768px) {
+/*Modifiation of the breakpoint from 768 to 1000px to avoid the menu to go on a second line*/
+@media screen and (max-width: 1000px) {
   .topnav.responsive {position: relative;}
   .topnav.responsive .icon {
     position: absolute;
@@ -208,6 +209,8 @@ input {
   font-size: 20px;
   height: 48px;
 }
+/*
+Not used in the JS updated code
 .formData[data-error]::after {
   content: attr(data-error);
   font-size: 0.4em;
@@ -226,7 +229,7 @@ input {
 .formData[data-error-visible="true"] .text-control {
   border: 2px solid #e54858;
 }
-/* 
+ 
 input[data-error]::after {
     content: attr(data-error);
     font-size: 0.4em;
@@ -527,3 +530,159 @@ footer {
   }
 }
 
+/*---------------------------------------------------------------------------------------------------*/
+/*-------------------------------CSS ADDED PROPERTIES TO THE ORIGINAL FILE---------------------------*/
+/*---------------------------------------------------------------------------------------------------*/
+
+/*------------------------PROPERTIES OF THE ADDED ELEMENT INVALID-MESSAGE ----------------------------*/
+
+/*new element at the end of all .formData elements*/
+.invalid-message {
+  position:absolute;
+  bottom: 0;
+  left: 0;
+  color: red;
+  font-size: 0.8rem;
+  font-weight: normal;
+}
+/*modification to leave free a location for the error messages (position absolute at the bottom of the element)*/
+.formData {
+  position:relative;
+  padding-bottom : 20px;
+}
+
+
+/*-----------------------------UPDATE OF THE MODAL OPEN/CLOSE ANIMATION---------------------------------*/
+
+/*animation properties set in a new class modal-appear and modal-disappear*/
+.content {
+  animation: unset; 
+}
+
+/*these classes are added to the modal form and submission success message with JS*/
+.modal-appear {
+  /*this one to make appear the modal*/
+  animation: modalopen 800ms normal both;
+}
+.modal-disappear {
+  /*this one to hide the modal*/
+  animation: modalopen 800ms reverse both;
+}
+
+
+/*-------------------------------PROPERTIES OF THE ADDED ELEMENT MODAL-SUBMITTED---------------------------*/
+
+/*New element (with sub-elements) directly added to the HTML file*/
+.modal-submitted {
+  display:none; /*turn to flex via JS on submission success*/
+  position: absolute;
+  top:0;
+  left:0;
+  width: 100%;
+  height: 100%;
+  padding: 30px 8%;
+  background-color: #232323;
+  z-index: 10;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-submitted-text {
+  /*grows to fill all the place where the form was except the submission button*/
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal-submitted-text p{
+  /*inner <p> is horizontally and vertically centred in his box*/
+  text-align: center;
+  font-weight: normal;
+  font-size: 40px;
+}
+.modal-submitted button{
+  /*button is at the bottom, same place as the submission button*/
+  position:absolute;
+  bottom: 0;
+  left:50%;
+  transform:translateX(-50%);
+  flex: none;
+}
+
+/*this element needs to be moved over the submission success message*/
+.close {
+  z-index: 20 
+}
+
+
+/*-----------------------------CORRECTION OF THE DISPLAY ISSUES------------------------------------------*/
+
+/*was a bit too big to display, with 16px the menu fit for 1000px width or more*/
+.topnav a {
+  font-size: 16px;
+}
+
+@media screen and (max-width: 1000px) {
+  /*text was too big for this screen size*/
+  .hero-headline{
+    font-size: 4rem;
+  }
+  .hero-text{
+    font-size: 100%;
+  }
+  /*It's better that the menu opens over the logo and main content instead of moving these part downside*/
+  .topnav {
+    position: relative;
+    overflow: unset;
+  }
+  .main-navbar {
+    float: none;
+    position: absolute;
+    top:0;
+    right: 0;
+    background-color: white;
+    z-index: 2;
+  }
+}
+
+/*as nav menu pass to z-index=2, bgground needs to go over*/
+.bground {
+  z-index:5;
+}
+
+@media screen and (max-width: 500px) {
+  /*text was too big for this screen size*/
+  .hero-content {
+    min-width: unset;
+  }
+  .hero-headline{
+    font-size: 2.5rem;
+  }
+  .hero-text{
+    font-size: 80%;
+  }
+}
+
+/*previously set bottom margin 11px for label elements broke the design for this one*/
+.checkbox-label, .checkbox2-label {
+  margin-bottom: unset;
+}
+
+/*image was compressed on small width screens*/
+.hero-img img {
+  object-fit: cover;
+}
+
+/*previously set bottom margin -15px broke the design*/
+@media screen and (max-width: 540px) {
+  .topnav a.icon {
+    margin-top: 5px; 
+  }
+}
+
+/*Logo a bit big on too small screen*/
+@media screen and (max-width: 350px) {
+  .header-logo img {
+    width: 220px;
+  }
+}
