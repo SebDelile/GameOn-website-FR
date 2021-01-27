@@ -562,11 +562,11 @@ footer {
 /*these classes are added to the modal form and submission success message with JS*/
 .modal-appear {
   /*this one to make appear the modal*/
-  animation: modalopen var(--modal-duration) normal both;
+  animation: modalopen 800ms normal both;
 }
 .modal-disappear {
   /*this one to hide the modal*/
-  animation: modalopen var(--modal-duration) reverse both;
+  animation: modalopen 800ms reverse both;
 }
 
 
@@ -582,7 +582,7 @@ footer {
   height: 100%;
   padding: 30px 8%;
   background-color: #232323;
-  z-index: 5;
+  z-index: 10;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
@@ -611,7 +611,7 @@ footer {
 
 /*this element needs to be moved over the submission success message*/
 .close {
-  z-index: 10 
+  z-index: 20 
 }
 
 
@@ -644,6 +644,12 @@ footer {
     z-index: 2;
   }
 }
+
+/*as nav menu pass to z-index=2, bgground needs to go over*/
+.bground {
+  z-index:5;
+}
+
 @media screen and (max-width: 500px) {
   /*text was too big for this screen size*/
   .hero-content {
@@ -658,7 +664,7 @@ footer {
 }
 
 /*previously set bottom margin 11px for label elements broke the design for this one*/
-.checkbox-label {
+.checkbox-label, .checkbox2-label {
   margin-bottom: unset;
 }
 

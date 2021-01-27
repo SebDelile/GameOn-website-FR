@@ -2,9 +2,9 @@
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
-const closeBtn = document.getElementsByClassName("close")[0];
-const form = document.getElementsByTagName("form")[0];
-const submiConfirm = document.getElementsByClassName("modal-submitted")[0];
+const closeBtn = document.querySelector(".close");
+const form = document.querySelector("form");
+const submiConfirm = document.querySelector(".modal-submitted");
 const submiCloseBtn = document.querySelector(".modal-submitted input");
 
 // --------------------------------- VARIABLES --------------------------------------------------
@@ -56,15 +56,14 @@ function editNav() {
 function launchModal() {
   modalbg.querySelector(".content").classList.add("modal-appear");
   modalbg.style.display = "block";
-  setTimeout(function(){modalbg.querySelector(".content").classList.remove("modal-appear")}, 1000);
-  
+  setTimeout(function(){modalbg.querySelector(".content").classList.remove("modal-appear")}, 800);
 }
 
 // close modal form, add the animation properties and then delete them to allow reverse animation to occur on open
 function closeModal() {
   modalbg.querySelector(".content").classList.add("modal-disappear");
-  setTimeout(function(){modalbg.querySelector(".content").classList.remove("modal-disappear")}, 1000);
-  setTimeout(function(){modalbg.style.display = "none"}, 1000); // let the animation goes on before vanish
+  setTimeout(function(){modalbg.querySelector(".content").classList.remove("modal-disappear")}, 800);
+  setTimeout(function(){modalbg.style.display = "none"}, 800); // let the animation goes on before vanish
   form.reset();
   //remove all event listener on field (they'll be re-add on new registration)
   form.first.removeEventListener("input", nameValidation);
@@ -103,7 +102,7 @@ for (let field of formData) {
 //function to edit the message in the span of invalid fields and add/remove a visual indication to the field
 function notifyError(field, message) {
   //edit the message, if message ="", then the span is not visible
-  field.parentNode.getElementsByClassName("invalid-message")[0].textContent = message;
+  field.parentNode.querySelector(".invalid-message").textContent = message;
   //visual indication adding/removing
   // case of input field : none or red border
   switch (field.type) {
@@ -117,25 +116,22 @@ function notifyError(field, message) {
         field.style.border = "2px solid red";
       }
       break;
-    //case of city selection : none or red underline
+    //case of city selection or checkbox1 (=GCU) : none or red underline on P/label
     case "radio":
-      let paragraph = field.parentNode.querySelector("p");
-      if (message === "") {
-        paragraph.style.textDecoration = "none";
-      } else {
-        paragraph.style.textDecoration = "underline wavy red";
-      }
-      break;
-    //case of GCU checkbox : none or red underline
-    //only call for checkbox1 (=GCU)
     case "checkbox":
-      let label = field.parentNode.querySelector("label");
-      if (message === "") {
-        label.style.textDecoration = "none";
-      } else {
-        label.style.textDecoration = "underline wavy red";
+      let text;
+      if (field.type === "radio") {
+        text = field.parentNode.querySelector("p");
       }
-      break;
+      if (field.type ==="checkbox") {
+        text = field.parentNode.querySelector("label");
+      }
+      if (message === "") {
+        text.style.textDecoration = "none";
+      } else {
+        text.style.textDecoration = "underline wavy red";
+      }
+      break;    
   }
 }
 
@@ -149,7 +145,7 @@ function nameValidation(event) {
       notifyError(event.target, messageTable.name);
     } else {
       //value is ok for HTML5, now more advanced JS verification to avoid special characters and numbers
-      let = regex = /^[^@&"()\[\]\{\}<>_$*%§¤€£`+=\/\\|~'"°;:!,\.?#0-9]+$/;
+      let = regex = /^[^@&"()\[\]\{\}<>_$*%§¤€£`+=\/\\|~'"°;:!,?#0-9]+$/;
       if (!regex.test(event.target.value)) {
         notifyError(event.target, messageTable.noSpecial);
       } else {
@@ -182,7 +178,7 @@ function emailValidation(event) {
 //function to check the validity of the birthdate
 function dateValidation(event) {
   //fully checked with HTML5 verifications : value is not "", is a date and is between lower and upper limits defined in the variable section (see above)
-  if (event.target.value === "") {
+  if (event.target.validity.valueMissing) {
     notifyError(event.target, messageTable.required);
   } else {
     if (!event.target.validity.valid) {
@@ -321,7 +317,6 @@ function validate(event) {
   for (let field of formData) {
     //a non-empty message means there is an error, the focus is given to this field and the function finish here
     if (field.querySelector(".invalid-message").textContent != "") {
-      validity = false;
       field.querySelector("input").focus();
       event.preventDefault();
       break;
@@ -334,7 +329,7 @@ function validate(event) {
 //if submission has occured, page is reload and the url contain "?" plus the values of the submitted form
 //thus it needs to display the confirmation message (not included to the validate() function because there is a reload of the page)
 const url = window.location.href;
-if (url.indexOf("?") != -1) {
+if (url.indexOf("?") != -1 && url.indexOf("&last=") != -1 && url.indexOf("&birthdate=") != -1 && url.indexOf("&location=") != -1) {
   submiConfirm.style.display = "flex";
   submiConfirm.querySelector("p").classList.add("modal-appear");
   modalbg.style.display = "block";
