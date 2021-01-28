@@ -18,7 +18,7 @@ const messageTable = {
   date: "Veuillez entrer une date de naissance valide",
   numberContests: "Veuillez entrer un nombre entier positif ou nul",
   radio: "Vous devez sélectionner une ville",
-  gcu: "Vous devez accepter les conditions générales d'utilisation",
+  gcu: "Vous devez accepter les conditions d'utilisation",
 };
 
 //birthdate range building
@@ -181,7 +181,8 @@ function emailValidation(event) {
 //function to check the validity of the birthdate
 function dateValidation(event) {
   //fully checked with HTML5 verifications : value is not "", is a date and is between lower and upper limits defined in the variable section (see above)
-  if (event.target.validity.valueMissing) {
+  console.log(event.target.value);
+  if (event.target.validity.valueMissing) { // note: in case of an impossible date (like 31-02-2000), the value is also set as "" by browser
     notifyError(event.target, messageTable.required);
   } else {
     if (!event.target.validity.valid) {
@@ -293,13 +294,19 @@ form.addEventListener(
         gcuAccepted(event);
         break;
     }
-    //After first submission, add event listener to radio and checkbox fields
+    //After first submission, add event listener to radio and checkbox fields (and other fields in case they had no blur until now)
     for (let i = 0; i < form.location.length; i++) {
       form.location[i].addEventListener("change", locationSelected);
     }
     form.gcu.addEventListener("change", gcuAccepted);
+    form.first.addEventListener("input", nameValidation);
+    form.last.addEventListener("input", nameValidation);
+    form.email.addEventListener("input", emailValidation);
+    form.birthdate.addEventListener("input", dateValidation);
+    form.quantity.addEventListener("input", contestNumberValidation);
 
-    //give the focus to the fisrt field with an error message
+
+    //give the focus to the first field with an error message
     //to avoid several successive focus, tests first which field has focus
     for (let field of formData) {
       if (field.querySelector(".invalid-message").textContent != "") {

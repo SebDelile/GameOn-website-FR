@@ -539,16 +539,18 @@ footer {
 /*new element at the end of all .formData elements*/
 .invalid-message {
   position:absolute;
-  bottom: 0;
+  bottom: 2px;
   left: 0;
+  height: 21px;
   color: red;
   font-size: 0.8rem;
   font-weight: normal;
+  line-height: 0.7rem;
 }
 /*modification to leave free a location for the error messages (position absolute at the bottom of the element)*/
 .formData {
   position:relative;
-  padding-bottom : 20px;
+  padding-bottom : 25px;
 }
 
 
@@ -663,9 +665,10 @@ footer {
   }
 }
 
-/*previously set bottom margin 11px for label elements broke the design for this one*/
-.checkbox-label, .checkbox2-label {
-  margin-bottom: unset;
+
+/*The date input field is grey on chrome mobile browser*/
+.text-control {
+  background: white;
 }
 
 /*image was compressed on small width screens*/
@@ -685,4 +688,14 @@ footer {
   .header-logo img {
     width: 220px;
   }
+}
+
+/*previously set bottom margin 11px for label elements broke the design for this one*/
+.checkbox-label, .checkbox2-label {
+  margin-bottom: unset;
+}
+
+/*on very small screen the two checkboxes collapse when one of the two labels contains line break*/
+.checkbox2-label {
+  min-height: 28px;
 }
