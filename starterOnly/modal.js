@@ -56,14 +56,20 @@ function editNav() {
 function launchModal() {
   modalbg.querySelector(".content").classList.add("modal-appear");
   modalbg.style.display = "block";
-  setTimeout(function(){modalbg.querySelector(".content").classList.remove("modal-appear")}, 800);
+  setTimeout(function () {
+    modalbg.querySelector(".content").classList.remove("modal-appear");
+  }, 800);
 }
 
 // close modal form, add the animation properties and then delete them to allow reverse animation to occur on open
 function closeModal() {
   modalbg.querySelector(".content").classList.add("modal-disappear");
-  setTimeout(function(){modalbg.querySelector(".content").classList.remove("modal-disappear")}, 800);
-  setTimeout(function(){modalbg.style.display = "none"}, 800); // let the animation goes on before vanish
+  setTimeout(function () {
+    modalbg.querySelector(".content").classList.remove("modal-disappear");
+  }, 800);
+  setTimeout(function () {
+    modalbg.style.display = "none";
+  }, 800); // let the animation goes on before vanish
   form.reset();
   //remove all event listener on field (they'll be re-add on new registration)
   form.first.removeEventListener("input", nameValidation);
@@ -123,7 +129,7 @@ function notifyError(field, message) {
       if (field.type === "radio") {
         text = field.parentNode.querySelector("p");
       }
-      if (field.type ==="checkbox") {
+      if (field.type === "checkbox") {
         text = field.parentNode.querySelector("label");
       }
       if (message === "") {
@@ -131,10 +137,9 @@ function notifyError(field, message) {
       } else {
         text.style.textDecoration = "underline wavy red";
       }
-      break;    
+      break;
   }
 }
-
 
 // ------------------------------------ FORM VALIDATION FUNCTIONS ------------------------------------------
 
@@ -182,7 +187,8 @@ function emailValidation(event) {
 function dateValidation(event) {
   //fully checked with HTML5 verifications : value is not "", is a date and is between lower and upper limits defined in the variable section (see above)
   console.log(event.target.value);
-  if (event.target.validity.valueMissing) { // note: in case of an impossible date (like 31-02-2000), the value is also set as "" by browser
+  if (event.target.validity.valueMissing) {
+    // note: in case of an impossible date (like 31-02-2000), the value is also set as "" by browser
     notifyError(event.target, messageTable.required);
   } else {
     if (!event.target.validity.valid) {
@@ -305,7 +311,6 @@ form.addEventListener(
     form.birthdate.addEventListener("input", dateValidation);
     form.quantity.addEventListener("input", contestNumberValidation);
 
-
     //give the focus to the first field with an error message
     //to avoid several successive focus, tests first which field has focus
     for (let field of formData) {
@@ -323,7 +328,6 @@ form.addEventListener(
 //Action on submission of the form : perform JS verification, and if ok do submission
 //Do not occur if at least one field is invalid according to HTML5 verification
 function validate(event) {
-  
   for (let field of formData) {
     //a non-empty message means there is an error, the focus is given to this field and the function finish here
     if (field.querySelector(".invalid-message").textContent != "") {
@@ -334,12 +338,21 @@ function validate(event) {
   }
   // if it gets here without activating "preventDefault()", the submission is done
   // So the page is reload with a modified URL (method get, see HTML file)
-};
+}
 
 //if submission has occured, page is reload and the url contain "?" plus the values of the submitted form
 //thus it needs to display the confirmation message (not included to the validate() function because there is a reload of the page)
 const url = window.location.href;
-if (url.indexOf("?") != -1 && url.indexOf("first=") != -1 && url.indexOf("&last=") != -1 && url.indexOf("&email=") != -1 && url.indexOf("&birthdate=") != -1 && url.indexOf("&quantity=") != -1 && url.indexOf("&location=") != -1 && url.indexOf("&gcu=") != -1) {
+if (
+  url.indexOf("?") != -1 &&
+  url.indexOf("first=") != -1 &&
+  url.indexOf("&last=") != -1 &&
+  url.indexOf("&email=") != -1 &&
+  url.indexOf("&birthdate=") != -1 &&
+  url.indexOf("&quantity=") != -1 &&
+  url.indexOf("&location=") != -1 &&
+  url.indexOf("&gcu=") != -1
+) {
   submiConfirm.style.display = "flex";
   submiConfirm.querySelector("p").classList.add("modal-appear");
   modalbg.style.display = "block";
