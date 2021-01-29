@@ -7,37 +7,6 @@ const form = document.querySelector("form");
 const submiConfirm = document.querySelector(".modal-submitted");
 const submiCloseBtn = document.querySelector(".modal-submitted input");
 
-// --------------------------------- VARIABLES --------------------------------------------------
-
-//table used to display the error messages
-const messageTable = {
-  required: "Ce champ doit être renseigné",
-  name: "Veuillez entrer un minimum de deux caractères",
-  noSpecial: "Veuillez ne pas utiliser de caractères spéciaux ou numériques",
-  email: "Veuillez entrer un email valide",
-  date: "Veuillez entrer une date de naissance valide",
-  numberContests: "Veuillez entrer un nombre entier positif ou nul",
-  radio: "Vous devez sélectionner une ville",
-  gcu: "Vous devez accepter les conditions d'utilisation",
-};
-
-//birthdate range building
-//current oldest people is born in 1903 (https://en.wikipedia.org/wiki/Oldest_people checked on 2021/01/25)
-form.birthdate.setAttribute("min", "1903-01-01");
-//today is set as upper limit, but if the GCU require a minimum age for participation, the limit should be modified accordingly
-let today = new Date();
-let dd = today.getDate();
-let mm = today.getMonth() + 1; //January is 0!
-let yyyy = today.getFullYear();
-if (dd < 10) {
-  dd = "0" + dd;
-}
-if (mm < 10) {
-  mm = "0" + mm;
-}
-today = yyyy + "-" + mm + "-" + dd;
-form.birthdate.setAttribute("max", today);
-
 // ------------------------------- MENU OPENING MOBILE MODE ----------------------------------------------
 
 // function to open menu in mobile mode, replace with CSS ??
@@ -66,10 +35,8 @@ function closeModal() {
   modalbg.querySelector(".content").classList.add("modal-disappear");
   setTimeout(function () {
     modalbg.querySelector(".content").classList.remove("modal-disappear");
+    modalbg.style.display = "none";// let the animation goes on before vanish
   }, 800);
-  setTimeout(function () {
-    modalbg.style.display = "none";
-  }, 800); // let the animation goes on before vanish
   form.reset();
   //remove all event listener on field (they'll be re-add on new registration)
   form.first.removeEventListener("input", nameValidation);
@@ -140,6 +107,17 @@ function notifyError(field, message) {
       break;
   }
 }
+//table used to display the error messages
+const messageTable = {
+  required: "Ce champ doit être renseigné",
+  name: "Veuillez entrer un minimum de deux caractères",
+  noSpecial: "Veuillez ne pas utiliser de caractères spéciaux ou numériques",
+  email: "Veuillez entrer un email valide",
+  date: "Veuillez entrer une date de naissance valide",
+  numberContests: "Veuillez entrer un nombre entier positif ou nul",
+  radio: "Vous devez sélectionner une ville",
+  gcu: "Vous devez accepter les conditions d'utilisation",
+};
 
 // ------------------------------------ FORM VALIDATION FUNCTIONS ------------------------------------------
 
@@ -153,7 +131,7 @@ function nameValidation(event) {
       notifyError(event.target, messageTable.name);
     } else {
       //value is ok for HTML5, now more advanced JS verification to avoid special characters and numbers
-      let = regex = /^[^@&"()\[\]\{\}<>_$*%§¤€£`+=\/\\|~'"°;:!,?#0-9]+$/;
+      let regex = /^[^@&"()\[\]\{\}<>_$*%§¤€£`+=\/\\|~'"°;:!,?#0-9]+$/;
       if (!regex.test(event.target.value)) {
         notifyError(event.target, messageTable.noSpecial);
       } else {
@@ -198,9 +176,24 @@ function dateValidation(event) {
     }
   }
 }
+//birthdate range building
+//current oldest people is born in 1903 (https://en.wikipedia.org/wiki/Oldest_people checked on 2021/01/25)
+form.birthdate.setAttribute("min", "1903-01-01");
+//today is set as upper limit, but if the GCU require a minimum age for participation, the limit should be modified accordingly
+let today = new Date();
+let dd = today.getDate();
+let mm = today.getMonth() + 1; //January is 0!
+let yyyy = today.getFullYear();
+if (dd < 10) {
+  dd = "0" + dd;
+}
+if (mm < 10) {
+  mm = "0" + mm;
+}
+today = yyyy + "-" + mm + "-" + dd;
+form.birthdate.setAttribute("max", today);
 
 //function to check the validity of number of attented contests
-//note : an eventlistener is set to block the input of "," "." or "-" in this field (see section form verification event)
 function contestNumberValidation(event) {
   //fully checked with HTML5 verification : value is not "" and is a positive number or 0
   if (event.target.validity.valueMissing) {
@@ -215,6 +208,14 @@ function contestNumberValidation(event) {
     }
   }
 }
+//the field number of contest should be a positive integer, remove "." "," or "-" if tipped
+form.quantity.addEventListener("keydown", function (event) {
+  //condition to catch "." "," and "-" characters
+  if (event.key == "," || event.key == "." || event.key == "-") {
+    event.preventDefault();
+  }
+});
+
 
 //function to check if a radio is selected
 function locationSelected(event) {
@@ -236,13 +237,6 @@ function gcuAccepted(event) {
 
 //------------------------FORM VERIFICATION EVENTS-------------------------------------------------------------
 
-//the field number of contest should be a positive integer, remove "." "," or "-" if tipped
-form.quantity.addEventListener("keydown", function (event) {
-  //condition to catch "." "," and "-" characters
-  if (event.key == "," || event.key == "." || event.key == "-") {
-    event.preventDefault();
-  }
-});
 
 //realtime validation of input fields (except radio and checkbox)
 //each is launched after first blur
